@@ -86,9 +86,110 @@ public:
 
 ## 交叉链表
 
+一开始没有想起把链表反过来，所以用了冗长的代码让长链表的cur往前走，用了教程的方法后简洁了很多。记笔记
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *getIntersectionNode(ListNode *headA, ListNode *headB) {
+        ListNode* curA=headA;
+        ListNode* curB=headB;
+        int lenA=0, lenB=0;
+        while(curA!=NULL){
+            curA=curA->next;
+            lenA++;
+        }
+        while(curB!=NULL){
+            curB=curB->next;
+            lenB++;
+        }
+        curA=headA;
+        curB=headB;
+        /////////////////
+        int N=lenA-lenB;
+        if(N>=0){
+            while(N--){
+                curA=curA->next;
+            }
+        }else{
+            N=-N;
+            while(N--){
+                curB=curB->next;
+            }
+        }
+        /////////////////
+        //  if (lenB > lenA) {
+        //     swap (lenA, lenB);
+        //     swap (curA, curB);
+        // }
+        // // 求长度差
+        // int gap = lenA - lenB;
+        // // 让curA和curB在同一起点上（末尾位置对齐）
+        // while (gap--) {
+        //     curA = curA->next;
+        // }
+        ///////////////////
+
+        while(curA!=NULL&&curB!=NULL){
+            if(curA==curB){
+                return curA;
+            }
+            curA=curA->next;
+            curB=curB->next;
+        }
+        return NULL;
+    }
+};
+```
+
 ## 环形链表
 
-上面两个思路都很好想，但是没有写代码，回头补齐！
+![image.png](%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E9%93%BE%E8%A1%A8%20part02%20d726538066a946daab5037d1fe3c4722/image%201.png)
+
+![image.png](%E7%AC%AC%E4%BA%8C%E7%AB%A0%20%E9%93%BE%E8%A1%A8%20part02%20d726538066a946daab5037d1fe3c4722/image%202.png)
+
+```cpp
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode(int x) : val(x), next(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode *detectCycle(ListNode *head) {
+        ListNode* fast = head;
+        ListNode* slow = head;
+
+        while(fast!=NULL&&fast->next!=NULL){
+            slow=slow->next;
+            fast=fast->next->next;
+
+            if(slow==fast){
+                ListNode* cur1 = fast;
+                ListNode* cur2 = head;
+
+                while(cur1!=cur2){
+                    cur1 = cur1 -> next;
+                    cur2 = cur2 -> next;
+                }
+                return cur1;   
+            }
+        }
+        return NULL;
+    }
+};
+```
 
 用两天时间很快的就把链表的知识过了一遍，效率很高！总结：
 
